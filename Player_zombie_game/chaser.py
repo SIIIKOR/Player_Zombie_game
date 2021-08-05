@@ -333,7 +333,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("window_parameters", help="Game parameters: (width_cells_amount, "
                                                   "height_cells_amount, cell_width, line_width)", nargs="+", type=int)
-    parser.add_argument("-p", "--player_cords", help="Starting player coordinates: (n, m)", default=(0, 0), nargs="+", type=int)
+    parser.add_argument("-p", "--player_cords", help="Starting player coordinates: (n, m)",
+                        default=(0, 0), nargs="+", type=int)
     parser.add_argument("-z", "--zombie_amount", help="Amount of zombies in the game", default=1, type=int)
     args = parser.parse_args()
     total_height, total_width, cell_width, line_width = args.window_parameters
