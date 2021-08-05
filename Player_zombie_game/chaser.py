@@ -2,6 +2,7 @@
 
 import pygame
 import math
+import argparse
 from random import randrange, choice
 from time import sleep
 from collections import deque, defaultdict
@@ -165,14 +166,14 @@ class Game:
         """
         n, m = cords
         output = []
-        if (n-1-r, m) not in self.walls and n-1-r >= 0:
-            output.append([(n-1-r, m) for r in range(r+1)]) if r else output.append((n-1, m))
-        if (n+1+r, m) not in self.walls and n+1+r <= self.n-1:
-            output.append([(n+1+r, m) for r in range(r+1)]) if r else output.append((n+1, m))
-        if (n, m-1-r) not in self.walls and m-1-r >= 0:
-            output.append([(n, m-1-r) for r in range(r+1)]) if r else output.append((n, m-1))
-        if (n, m+1+r) not in self.walls and m+1+r <= self.m-1:
-            output.append([(n, m+1+r) for r in range(r+1)]) if r else output.append((n, m+1))
+        if (n - 1 - r, m) not in self.walls and n - 1 - r >= 0:
+            output.append([(n - 1 - r, m) for r in range(r + 1)]) if r else output.append((n - 1, m))
+        if (n + 1 + r, m) not in self.walls and n + 1 + r <= self.n - 1:
+            output.append([(n + 1 + r, m) for r in range(r + 1)]) if r else output.append((n + 1, m))
+        if (n, m - 1 - r) not in self.walls and m - 1 - r >= 0:
+            output.append([(n, m - 1 - r) for r in range(r + 1)]) if r else output.append((n, m - 1))
+        if (n, m + 1 + r) not in self.walls and m + 1 + r <= self.m - 1:
+            output.append([(n, m + 1 + r) for r in range(r + 1)]) if r else output.append((n, m + 1))
         return output
 
     def find_path(self, src, trg):
@@ -328,10 +329,23 @@ class Game:
             sleep(0.1)
 
 
-if __name__ == '__main__':
-    s1 = Game(30, 60, 20, 1)  # total height, total width, cell_width, white line width
-    s1.add_player((0, 0))
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("window_parameters", help="Game parameters: (width_cells_amount, "
+                                                  "height_cells_amount, cell_width, line_width)", nargs="+", type=int)
+    parser.add_argument("-p", "--player_cords", help="Starting player coordinates: (n, m)", default=(0, 0), nargs="+", type=int)
+    parser.add_argument("-z", "--zombie_amount", help="Amount of zombies in the game", default=1, type=int)
+    args = parser.parse_args()
+    total_height, total_width, cell_width, line_width = args.window_parameters
+    player_cords = args.player_cords
+    zombie_amount = args.zombie_amount
+    s1 = Game(total_height, total_width, cell_width, line_width)  # total height, total width, cell_width, line_width
+    s1.add_player(tuple(player_cords))
     s1.generate_maze()
-    for i in range(3):
+    for i in range(zombie_amount):
         s1.add_zombie(s1.get_random_unoccupied_cords())
     s1.run()
+
+
+if __name__ == '__main__':
+    main()
